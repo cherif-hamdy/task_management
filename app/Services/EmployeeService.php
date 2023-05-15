@@ -14,7 +14,7 @@ class EmployeeService {
     public function list()
     {
         try {
-            $employees = Employee::where('manager_id', auth()->user()->manager->id)->with(['user','manager','department'])->latest()->get();
+            $employees = Employee::with(['user','manager','department'])->latest()->get();
             return response()->json([
                 'success' => true,
                 'data' => $employees
@@ -32,7 +32,7 @@ class EmployeeService {
     {
         DB::beginTransaction();
         try {
-
+            $imageName = null;
             $user = User::create(array_merge($request->all(), ['role' => 'employee']));
             if ($request->hasFile('image')) {
                 $imageName = $request->file('image')->getClientOriginalName();
@@ -59,14 +59,14 @@ class EmployeeService {
     {
         DB::beginTransaction();
         try {
-            $employee->user->update($request->validated());
+            $employee->user->update($request->all());
             if ($request->hasFile('image')) {
                 $imageName = $request->file('image')->getClientOriginalName();
                 $request->image->move(public_path('images'), $imageName);
-                $employee->update(array_merge($request->validated(), ['image' => $imageName]));
+                $employee->update(array_merge($request->all(), ['image' => $imageName]));
             }
             else{
-                $employee->update($request->validated());
+                $employee->update($request->all());
             }
 
             DB::commit();
