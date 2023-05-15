@@ -6,6 +6,12 @@
         <div class="row justify-content-center mt-3">
             <div class="col-md-10">
                 <a href="{{ route('employees.create') }}" class="btn btn-primary mb-2">Add Employee</a>
+                <form action="{{ route('employees.index') }}" method="GET"> 
+                    <div class="d-flex mb-2">
+                        <input type="text" name="search" class="form-control" style="width: 200px;margin-right: 2px;">
+                        <button class="btn btn-sm btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>

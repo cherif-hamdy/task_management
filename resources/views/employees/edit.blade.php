@@ -4,11 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                @if ($errors)
-                    @foreach ($errors->all() as $error)
-                        <p>{{ $error }}</p>
-                    @endforeach
-                @endif
+               
                 <div class="card">
                     <div class="card-header">Edit "{{ $employee->user->fullName }}" Employee</div>
                     <div class="card-body">

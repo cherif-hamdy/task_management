@@ -15,11 +15,20 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $response = (new DepartmentService())->list();
-        $departments = match($response->getStatusCode()) {
+        if(request()->search)
+        {
+            $response = (new DepartmentService())->search(request()->search);
+            $departments = match($response->getStatusCode()) {
+                Response::HTTP_OK => $response->getOriginalContent()['data'],
+                Response::HTTP_INTERNAL_SERVER_ERROR => []
+            };
+        }else{
+            $response = (new DepartmentService())->list();
+            $departments = match($response->getStatusCode()) {
             Response::HTTP_OK => $response->getOriginalContent()['data'],
             Response::HTTP_INTERNAL_SERVER_ERROR => []
         };
+        }
 
         return view('departments.index', compact('departments'));
     }

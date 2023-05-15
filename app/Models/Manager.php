@@ -22,4 +22,9 @@ class Manager extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function tasks() : HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
 }

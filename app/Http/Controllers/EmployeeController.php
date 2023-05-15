@@ -18,11 +18,21 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $response = (new EmployeeService())->list();
-        $employees = match($response->getStatusCode()) {
+        if(request()->search)
+        {
+            $response = (new EmployeeService())->search(request()->search);
+            $employees = match($response->getStatusCode()) {
+                Response::HTTP_OK => $response->getOriginalContent()['data'],
+                Response::HTTP_INTERNAL_SERVER_ERROR => []
+            };
+        }
+        else{
+            $response = (new EmployeeService())->list();
+            $employees = match($response->getStatusCode()) {
             Response::HTTP_OK => $response->getOriginalContent()['data'],
             Response::HTTP_INTERNAL_SERVER_ERROR => []
         };
+        }
         return view('employees.index', compact('employees'));
     }
 

@@ -13,6 +13,7 @@ class DepartmentService {
         try {
             $departments = Department::query()
                 ->withCount('employees')
+                ->withSum('employees', 'salary')
                 ->latest()->get();
             return response()->json([
                 'success' => true,
@@ -83,6 +84,23 @@ class DepartmentService {
                 'success' => false,
                 'message' => 'Something went wrong'
             ]);
+        }
+    }
+
+    public function search($search)
+    {
+        try{
+            $departments = Department::where('name', 'like', '%'. $search. '%')->withCount('employees')->withSum('employees', 'salary')->get();
+            return response()->json([
+                'success' => true,
+                'data' => $departments
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            logger($e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

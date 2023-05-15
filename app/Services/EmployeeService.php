@@ -14,7 +14,7 @@ class EmployeeService {
     public function list()
     {
         try {
-            $employees = Employee::with(['user','manager','department'])->latest()->get();
+            $employees = Employee::where('manager_id', auth()->user()->manager->id)->with(['user','manager','department'])->latest()->get();
             return response()->json([
                 'success' => true,
                 'data' => $employees
@@ -103,6 +103,25 @@ class EmployeeService {
                 'success' => false,
                 'message' => 'Something went wrong'
             ]);
+        }
+    }
+ 
+    public function search($search)
+    {
+        try {
+            $employees = Employee::where('manager_id', auth()->user()->manager->id)->whereHas('user', function($query) use($search){
+                $query->where('first_name', 'like', '%'. $search . '%');
+            })->get();
+            return response()->json([
+                'success' => true,
+                'data' => $employees
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            logger($e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
