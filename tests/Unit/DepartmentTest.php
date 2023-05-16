@@ -15,7 +15,7 @@ class DepartmentTest extends TestCase
         Department::factory(3)->create();
         $response = (new DepartmentService())->list();
 
-        $this->assertCount(3, $response);
+        $this->assertCount(3, $response->getOriginalContent()['data']);
     }
 
     public function test_it_can_store_department()

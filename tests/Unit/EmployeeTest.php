@@ -16,14 +16,15 @@ class EmployeeTest extends TestCase
 {
    public function test_it_can_list_employees()
    {
-      Employee::factory(3)->create();
+      $manager = Manager::factory()->create();
+      $this->actingAs($manager->user);
+      Employee::factory(3)->create(['manager_id' => $manager->id]);
       $response = (new EmployeeService())->list();
       $this->assertCount(3, $response->getOriginalContent()['data']);
    }
 
    public function test_it_can_create_employee()
    {
-      
       $request = new EmployeeRequest([
          'first_name' => fake()->firstName(),
          'last_name' => fake()->lastName(),

@@ -89,6 +89,7 @@ class EmployeeService {
         DB::beginTransaction();
         try {
             $user = User::where('id', $employee->user_id)->first();
+            $employee->tasks()->delete();
             $employee->delete();
             $user->delete();
             DB::commit();

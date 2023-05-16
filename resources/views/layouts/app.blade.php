@@ -84,8 +84,31 @@
                     {{ session('error') }}
                 </div>
             @endif
-            @yield('content')
+            @auth
+            <div class="row">
+                <div class="col-md-2">
+                    <ul class="list-group bg-info">
+                        @if (auth()->user()->role == 'manager')
+                            <li class="list-group-item">
+                                <a href="{{ route('employees.index') }}">Employees</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{ route('departments.index') }}">Departments</a>
+                            </li>
+                        @endif
+                        <li class="list-group-item">
+                            <a href="{{ route('tasks.index') }}">Tasks</a>
+                        </li>
+                    </ul>
+                </div>
+                @endauth
+               <div class="col-md-8">
+                @yield('content')
+               </div>
+            </div>
         </main>
     </div>
+
+    @stack('js')
 </body>
 </html>

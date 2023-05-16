@@ -40,11 +40,7 @@
                                 <td>
                                     <div class="d-flex justify-content-around">
                                         <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-info">Edit</a>
-                                        <form action="{{ route('employees.destroy', $employee->id) }}" method="POST">
-                                            @csrf 
-                                            @method("DELETE")
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
+                                        <x-confirm-modal route="employees.destroy" :id="$employee->id"></x-confirm-modal>
                                     </div>
                                 </td>
                             </tr>

@@ -51,12 +51,19 @@ class TaskService {
     public function updateStatus(Request $request, Task $task)
     {
         try {
-            $task->update([
-                'status' => $request->status
-            ]);
+            if($task->employee_id == auth()->user()->employee->id)
+            {
+                $task->update([
+                    'status' => $request->status
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'task updated successfully'
+                ]);
+            }
             return response()->json([
-                'success' => true,
-                'message' => 'task updated successfully'
+                'success' => false,
+                'message' => 'You are not authorized'
             ]);
         } catch (Exception $e) {
             logger($e);
